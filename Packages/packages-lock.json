@@ -24,12 +24,12 @@
       "depth": 0,
       "source": "embedded",
       "dependencies": {
-        "jp.keijiro.rtmidi": "1.0.3",
+        "jp.keijiro.rtmidi": "1.0.4",
         "com.unity.inputsystem": "1.0.1"
       }
     },
     "jp.keijiro.rtmidi": {
-      "version": "1.0.3",
+      "version": "1.0.4",
       "depth": 1,
       "source": "registry",
       "dependencies": {},

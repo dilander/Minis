@@ -32,11 +32,12 @@ sealed class NoteCallback : MonoBehaviour
                 ));
             };
 
-            midiDevice.onWillNoteOff += (note) => {
+            midiDevice.onWillNoteOff += (note, velocity) => {
                 Debug.Log(string.Format(
-                    "Note Off #{0} ({1}) ch:{2} dev:'{3}'",
+                    "Note Off #{0} ({1}) vel:{2:0.00} ch:{3} dev:'{4}'",
                     note.noteNumber,
                     note.shortDisplayName,
+                    velocity,
                     (note.device as Minis.MidiDevice)?.channel,
                     note.device.description.product
                 ));

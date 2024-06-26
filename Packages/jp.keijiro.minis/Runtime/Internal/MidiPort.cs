@@ -95,7 +95,7 @@ namespace Minis
                 if (status == 9 && !noteOff)
                     GetChannelDevice(channel).ProcessNoteOn(data1, data2);
                 else if (noteOff)
-                    GetChannelDevice(channel).ProcessNoteOff(data1);
+                    GetChannelDevice(channel).ProcessNoteOff(data1, data2);
                 else if (status == 0xb)
                     GetChannelDevice(channel).ProcessControlChange(data1, data2);
             }

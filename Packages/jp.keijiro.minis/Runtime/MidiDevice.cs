@@ -47,11 +47,11 @@ public sealed class MidiDevice : InputDevice
     // The input system fires this event before processing a note-off message
     // on this device instance. It gives a target note as an event argument.
     // Note that the MidiNoteControl hasn't been updated at this point.
-    public event Action<MidiNoteControl> onWillNoteOff
+    public event Action<MidiNoteControl, float> onWillNoteOff
     {
         // Action list lazy allocation
         add => (_willNoteOffActions = _willNoteOffActions ??
-                new List<Action<MidiNoteControl>>()).Add(value);
+                new List<Action<MidiNoteControl, float>>()).Add(value);
         remove => _willNoteOffActions.Remove(value);
     }
 
@@ -77,7 +77,7 @@ public sealed class MidiDevice : InputDevice
     MidiValueControl [] _controls;
 
     List<Action<MidiNoteControl, float>> _willNoteOnActions;
-    List<Action<MidiNoteControl>> _willNoteOffActions;
+    List<Action<MidiNoteControl, float>> _willNoteOffActions;
     List<Action<MidiValueControl, float>> _willControlChangeActions;
 
     #endregion
@@ -96,15 +96,16 @@ public sealed class MidiDevice : InputDevice
                 action(_notes[note], fvelocity);
     }
 
-    internal void ProcessNoteOff(byte note)
+    internal void ProcessNoteOff(byte note, byte velocity)
     {
         // State update with a delta event
-        InputSystem.QueueDeltaStateEvent(_notes[note], (byte)0);
+        InputSystem.QueueDeltaStateEvent(_notes[note], velocity);
 
         // Note-off event invocation (only when it exists)
+        var fvelocity = velocity / 127.0f;
         if (_willNoteOffActions != null)
             foreach (var action in _willNoteOffActions)
-                action(_notes[note]);
+                action(_notes[note], fvelocity);
     }
 
     internal void ProcessControlChange(byte number, byte value)
